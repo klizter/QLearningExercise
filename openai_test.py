@@ -1,5 +1,7 @@
-import gym
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+import gym
 
 """ Q Learning """
 # Q-Learning with neural nets
