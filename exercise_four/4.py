@@ -15,7 +15,7 @@ from copy import deepcopy
 # save a copy of the final Q function for later use. (Demo)
 
 
-def q_learning_greedy_probability_policy():g
+def q_learning_greedy_probability_policy():
 
     env = gym.make('FrozenLake-v0')
     q_learning = QLearningAction(env.action_space.n, env.observation_space.n, epsilon=0.1, learning_rate=0.1)
@@ -27,21 +27,14 @@ def q_learning_greedy_probability_policy():g
         # We start a new episode with have to reset the environment and stats
         observation = env.reset()
         accumulated_reward = 0.0
-        previous_action = None
-        previous_observation = None
-        reward = None
-        done = False
+        action = q_learning.greedy_probability_policy(observation)
 
         for t in range(100):
-
-            # Show current state
-            # env.render()
-
-            # Choose action based on current experience
-            next_action = q_learning.greedy_probability_policy(observation)
-
-            if t != 0:
-                q_learning.update_state_action_function(previous_observation, previous_action, reward, next_action, observation)
+            previous_action, previous_observation = int(action), int(observation)
+            observation, reward, done, info = env.step(action)
+            action = q_learning.greedy_probability_policy(observation)
+            accumulated_reward += reward
+            q_learning.update_state_action_function(previous_observation, previous_action, reward, action, observation)
 
             if done:
                 print "Episode finished after {} timesteps".format(t+1)
@@ -49,11 +42,6 @@ def q_learning_greedy_probability_policy():g
                 all_over_reward += accumulated_reward
                 episode_rewards.append(accumulated_reward)
                 break
-
-            # Save previous state, and commit action, resulting new current state
-            previous_action = int(next_action)
-            previous_observation = int(observation)
-            observation, reward, done, info = env.step(next_action)
 
             # Accumulate more reward
             accumulated_reward += reward

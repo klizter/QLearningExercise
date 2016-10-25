@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from random import uniform, randrange
+import pickle
 
 
 class QLearning(object):
@@ -41,3 +42,11 @@ class QLearning(object):
         for state_actions in self.q_table:
             print str(state_number) + ":\t\t" + "\t\t".join(str(round(action_value, 4))[1:] for action_value in state_actions)
             state_number += 1
+
+
+    """ Write Dump """
+
+    def write_q_function_dump(self):
+        dump_file = open('./../dump.txt', 'w')
+        pickle.dump(self.q_table, dump_file)
+        dump_file.close()
